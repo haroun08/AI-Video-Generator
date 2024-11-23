@@ -6,13 +6,14 @@ import { initializeApp } from "firebase/app";
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: "replanto.firebaseapp.com",
-  databaseURL: "https://replanto-default-rtdb.firebaseio.com",
-  projectId: "replanto",
-  storageBucket: "replanto.appspot.com",
-  messagingSenderId: "1051656917820",
-  appId: "1:1051656917820:web:b2c4ac028ac7e369728439"
+  authDomain: "todoapp-b8d81.firebaseapp.com",
+  projectId: "todoapp-b8d81",
+  storageBucket: "todoapp-b8d81.appspot.com",
+  messagingSenderId: "783717395174",
+  appId: "1:783717395174:web:7fca36155602eb7a58a927"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+export default app;
+
