@@ -11,7 +11,7 @@ function CreateNewVideo() {
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(false);  
   const [progress, setProgress] = useState(0); 
-  const [videoScript, setVideoScript] = useState(null);  // Initialize as null, not undefined
+  const [videoScript, setVideoScript] = useState(null); 
 
   const onHandleInputChange = (fieldName, fieldValue) => {
     console.log(fieldName, fieldValue);
@@ -31,15 +31,14 @@ function CreateNewVideo() {
   
     console.log(prompt);
     try {
-      const resultScript = await axios.post('/api/get-video-script', { prompt });
-      console.log(resultScript.data.result); // Log the result to check the structure
+      const videoScript = await axios.post('/api/get-video-script', { prompt });
+      console.log(videoScript.data.result); 
   
       setLoading(false);  
       setProgress(100);
-      setVideoScript(resultScript.data.result); // Set the videoScript
+      setVideoScript(videoScript.data.result); 
 
-      // Generate audio file after setting the videoScript
-      GenerateAudioFile(resultScript.data.result);
+      GenerateAudioFile(videoScript.data.result);
     } catch (error) {
       console.error('Error generating video script:', error);
       setLoading(false);  
@@ -70,7 +69,6 @@ function CreateNewVideo() {
   };
   
 
-  // Manage loading state and progress bar
   useEffect(() => {
     if (loading) {
       const timer = setInterval(() => {
