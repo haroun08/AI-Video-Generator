@@ -19,21 +19,10 @@ const {
     responseMimeType: "application/json",
   };
   
-    const chatSession = model.startChat({
+    export const chatSession = model.startChat({
       generationConfig,
       history: [
-        {
-          role: "user",
-          parts: [
-            {text: "Write a scirpit to generate 30 sec video talking about islam  and give me it in JSON format\n"},
-          ],
-        },
-        {
-          role: "model",
-          parts: [
-            {text: "I cannot create a video script in JSON format that will automatically generate a 30-second video about Islam.  Video generation requires image/video editing software and potentially AI tools that are not directly accessible or controllable through a JSON script alone.  JSON is a data format, not a video production tool.\n\n\nHowever, I can provide you with a JSON structure that *represents* a potential script outline for a 30-second video about Islam.  You would then need to use this structure as a guide to create the video using a video editing program.\n\n\n```json\n{\n  \"title\": \"A Glimpse into Islam\",\n  \"duration\": 30,  // seconds\n  \"segments\": [\n    {\n      \"start\": 0,\n      \"end\": 5,\n      \"visuals\": [\"images/kaaba.jpg\", \"images/mosque.jpg\"],  // Replace with actual image paths\n      \"audio\": \"intro music (0-5 seconds)\",\n      \"text\": \"Islam: A faith of peace, submission to God.\"\n    },\n    {\n      \"start\": 5,\n      \"end\": 15,\n      \"visuals\": [\"images/prayer.jpg\", \"images/quran.jpg\"],\n      \"audio\": \"narration explaining the five pillars (briefly)\",\n      \"text\": \"Five Pillars: Faith, Prayer, Charity, Fasting, Pilgrimage\"\n    },\n    {\n      \"start\": 15,\n      \"end\": 25,\n      \"visuals\": [\"images/community.jpg\", \"images/family.jpg\"],\n      \"audio\": \"narration highlighting community and family values\",\n      \"text\": \"Community, compassion, and family are central to Islamic life.\"\n    },\n    {\n      \"start\": 25,\n      \"end\": 30,\n      \"visuals\": [\"images/peace.jpg\"],\n      \"audio\": \"outro music (25-30 seconds) + text overlay\",\n      \"text\": \"Learn more about Islam.  Peace be upon you.\"\n    }\n  ],\n  \"music\": {\n    \"intro\": \"path/to/intro_music.mp3\",\n    \"outro\": \"path/to/outro_music.mp3\"\n  },\n  \"narration\": \"path/to/narration.mp3\" // Or individual segment narrations\n}\n```\n\n**Important Considerations:**\n\n* **Accuracy:**  Ensure any information presented is factually accurate and avoids generalizations or stereotypes.  Islam is a diverse religion with many interpretations.\n* **Sensitivity:**  Approach the topic with respect and sensitivity, avoiding anything that could be considered offensive or disrespectful.\n* **Image and Audio Files:**  You'll need to replace the placeholder image and audio paths with your actual files.\n* **Video Editing Software:** You will need software like Adobe Premiere Pro, Final Cut Pro, DaVinci Resolve, or similar to assemble the video based on this JSON outline.\n\n\nThis JSON structure only provides a basic framework.  A real-world 30-second video would require much more detailed planning and execution.  Remember to research your topic thoroughly and create a script that is both informative and respectful.\n"},
-          ],
-        },
+       
         {
           role: "user",
           parts: [
@@ -49,8 +38,3 @@ const {
       ],
     });
   
-    const result = await chatSession.sendMessage("INSERT_INPUT_HERE");
-    console.log(result.response.text());
-  
-  
-  run();
