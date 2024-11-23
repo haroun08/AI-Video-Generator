@@ -6,12 +6,17 @@ import SelectDuration from './_components/SelectDuration';
 import { Button } from '@/components/ui/button';
 import axios from 'axios';
 import CustomLoading from './_components/CustomLoading';
+import { v4 as uuidv4 } from 'uuid';
 
+
+const FILE_URL = 'https://firebasestorage.googleapis.com/v0/b/replanto.appspot.com/o/ai-short-video-files%2Foutput.mp3?alt=media&token=e43777fa-c740-4243-acf6-99845683e750';
 function CreateNewVideo() {
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(false);  
   const [progress, setProgress] = useState(0); 
   const [videoScript, setVideoScript] = useState(null); 
+  const [audioFileUrl,setAudioFileUrl] = useState();
+  const [captions,setCaptions] = useState();
 
   const onHandleInputChange = (fieldName, fieldValue) => {
     console.log(fieldName, fieldValue);
@@ -22,7 +27,8 @@ function CreateNewVideo() {
   };
 
   const onCreateClickHandler = () => {
-    getVideoScript();
+   // getVideoScript();
+   GenerateAudioCaption(FILE_URL);
   };
 
   const getVideoScript = async () => {
@@ -48,26 +54,53 @@ function CreateNewVideo() {
   const GenerateAudioFile = async (scriptData) => {
     try {
       if (typeof scriptData === 'string') {
-        scriptData = JSON.parse(scriptData);
+        try {
+          scriptData = JSON.parse(scriptData);
+        } catch (parseError) {
+          console.error('Error parsing scriptData:', parseError);
+          return; 
+        }
       }
   
+      // Check if scriptData is valid and contains the expected segments
       if (scriptData && scriptData.segments && Array.isArray(scriptData.segments)) {
         let script = '';
+        const id = uuidv4();
   
         scriptData.segments.forEach(item => {
-          script += item.contentText + '\n';
+          if (item.contentText) {
+            script += item.contentText + '\n';
+          } else {
+            console.error('Item is missing contentText:', item);
+          }
         });
-  
-        console.log('Well done Haroun => Generated Script:', script); 
+        console.log('Data Text--------',scriptData);
+        const response = await axios.post('/api/generate-audio', {
+          text: script,
+          id: id,
+        });
+        setAudioFileUrl(response.data);
+        console.log('Audio generated:', response.data);
       } else {
         console.error("'segments' is not an array or not defined.");
-        console.log('ScriptData:', scriptData); 
+        console.log('ScriptData:', scriptData);
       }
     } catch (error) {
       console.error('Error parsing or processing scriptData:', error);
     }
   };
   
+  const GenerateAudioCaption= async (fileUrl)=> {
+    setLoading(true);
+    await axios.post('/api/generate-caption',{
+      audioFileUrl:fileUrl
+    }).then(response=> {
+      console.log(response.data.result);
+      setCaptions(response.data.result);
+    })
+
+    setLoading(false);
+  }
 
   useEffect(() => {
     if (loading) {
