@@ -48,19 +48,63 @@ function PlayerDialog({ playVideo, videoId }) {
             <DialogDescription>
               {videoData ? (
                 <Player
-                component="RemotionVideo" // Must match the `id` in Composition
+                component={RemotionVideo} // Pass the actual component here
                 durationInFrames={750} // Dynamically update based on captions
                 compositionWidth={300}
                 compositionHeight={450}
                 fps={30}
                 controls={true}
                 inputProps={{
-                  script: videoData?.script || [],
-                  imageList: videoData?.imageList || [],
-                  audioFileUrl: videoData?.audioFileUrl || '',
-                  captions: videoData?.captions || [],
+                  script: videoData?.script || [{ imagePrompt: "test Haroun Barhoumi" }],
+                  imageList: videoData?.imageList || [
+                    "https://th.bing.com/th/id/OIP.O3NSw57ifjuhQ_mb29gzggHaHa?w=768&h=768&rs=1&pid=ImgDetMain",
+                    "https://picsum.photos/800/600?random=1",
+                    "https://picsum.photos/800/600?random=2",
+                    "https://picsum.photos/800/600?random=3",
+                  ],
+                  audioFileUrl:
+                    videoData?.audioFileUrl ||
+                    "https://firebasestorage.googleapis.com/v0/b/replanto.appspot.com/o/ai-short-video-files%2Foutput.mp3?alt=media&token=e43777fa-c740-4243-acf6-99845683e750",
+                  captions: videoData?.captions || [
+                    {
+                      "text": "Hello",
+                      "start": "0",
+                      "end": "150",
+                      "confidence": 0.98,
+                      "speaker": null
+                    },
+                    {
+                      "text": "Welcome to our video",
+                      "start": "151",
+                      "end": "300",
+                      "confidence": 0.92,
+                      "speaker": null
+                    },
+                    {
+                      "text": "This is a demo",
+                      "start": "301",
+                      "end": "450",
+                      "confidence": 0.87,
+                      "speaker": null
+                    },
+                    {
+                      "text": "Hope you enjoy it",
+                      "start": "451",
+                      "end": "600",
+                      "confidence": 0.9,
+                      "speaker": null
+                    },
+                    {
+                      "text": "Thank you",
+                      "start": "601",
+                      "end": "750",
+                      "confidence": 0.95,
+                      "speaker": null
+                    }
+                  ],
                 }}
               />
+              
               
               ) : (
                 <p>Loading video data...</p>
