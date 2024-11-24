@@ -15,7 +15,6 @@ function Dashboard() {
             
         </Link>
       </div>
-
         {videoList.length==0&&<div>
             <EmptyState></EmptyState>
             </div>}
