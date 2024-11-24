@@ -37,6 +37,7 @@ function CreateNewVideo() {
 
   const onCreateClickHandler = () => {
     getVideoScript();
+    
   };
 
   const getVideoScript = async () => {
@@ -185,11 +186,15 @@ function CreateNewVideo() {
         createdBy: user?.primaryEmailAddress.emailAddress,
       })
       .returning({ id: VideoData?.id });
-    setVideoId(result[0].id);
-    setPlayVideo(true);
+  
+    setVideoId(result[0].id);  // Store the video ID
     console.log(result);
-    setLoading(false);
+    setPlayVideo(true); // Set playVideo to true after data is saved
+    setLoading(false);  // End the loading state
   };
+  
+  
+
   return (
     <div className="md:px-20">
       <h2 className="font-bold text-ellipsis text-4xl text-primary text-center">
@@ -205,8 +210,8 @@ function CreateNewVideo() {
       </div>
 
       <CustomLoading loading={loading} progress={progress} />
-      <PlayerDialog playVideo={playVideo} videoId={videoId} />
-    </div>
+      <PlayerDialog playVideo={playVideo && videoId !== null} videoId={videoId} />
+      </div>
   );
 }
 

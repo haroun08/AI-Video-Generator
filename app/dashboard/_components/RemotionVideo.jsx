@@ -1,4 +1,4 @@
-'use client';
+"use client"
 import React, { useEffect, useState } from 'react';
 import { AbsoluteFill, Audio, Img, Sequence, useCurrentFrame } from 'remotion';
 
@@ -15,11 +15,16 @@ const RemotionVideo = ({
   const [durationInFrames, setInternalDurationInFrames] = useState(fps * 5);  
 
   useEffect(() => {
-     const calculatedDuration =
-      Math.floor((captions[captions.length - 1]?.end / 1000) * fps) || fps * 5;
+    const calculatedDuration =
+      Math.floor((captions[captions.length - 1]?.end / 1000) * 100*fps) || fps * 50;
+  
     setInternalDurationInFrames(calculatedDuration);
-    setDurationInFrame?.(calculatedDuration);  
-  }, [captions]);
+  
+    if (imageList.length === 0) {
+      setInternalDurationInFrames(fps * 5); 
+    }
+  }, [captions, imageList.length, fps]);
+  
 
   const getCurrentCaption = () => {
     const currentTimeMs = (frame / fps) * 100; // Convert frame to milliseconds
@@ -28,6 +33,7 @@ const RemotionVideo = ({
     );
     return currentCaption?.text || '';
   };
+  
 
   return (
     <AbsoluteFill style={{ backgroundColor: 'black' }}>
@@ -36,7 +42,7 @@ const RemotionVideo = ({
           <Sequence
             key={index}
             from={(index * durationInFrames) / imageList.length}
-            durationInFrames={durationInFrames / imageList.length}
+            durationInFrames={Math.max(durationInFrames / imageList.length, 150)} // Ensure each image stays at least 15 frames
           >
             <Img
               src={item}

@@ -54,7 +54,7 @@ function PlayerDialog({ playVideo, videoId }) {
           Array.from({ length: 50 }, (_, i) => `https://picsum.photos/800/600?random=${i + 1}`),
         audioFileUrl:
           videoData.audioFileUrl ||
-          "https://firebasestorage.googleapis.com/v0/b/replanto.appspot.com/o/ai-short-video-files%2Foutput.mp3?alt=media&token=e43777fa-c740-4243-acf6-99845683e750",
+          "https://firebasestorage.googleapis.com/v0/b/replanto.appspot.com/o/ai-short-video-files%2Foutput.mp3?alt=media&token=72db8329-f58a-4b3d-8ae1-107a987a3efd",
         captions: videoData.captions || [
           {
             text: "Hello",
@@ -64,7 +64,7 @@ function PlayerDialog({ playVideo, videoId }) {
             speaker: null,
           },
         ],
-        createdBy: "user@example.com", // Replace with the actual user email or ID
+        createdBy: "kun.haroun7@gmail.com", // Replace with the actual user email or ID
       };
 
       // Insert the new video into the database
@@ -90,8 +90,8 @@ function PlayerDialog({ playVideo, videoId }) {
             <DialogDescription>
               {videoData ? (
                 <Player
-                  component={RemotionVideo} // Pass the actual component here
-                  durationInFrames={600} // Dynamically update based on captions
+                  component={RemotionVideo}  
+                  durationInFrames={1800}  
                   compositionWidth={300}
                   compositionHeight={450}
                   fps={60}
@@ -99,20 +99,11 @@ function PlayerDialog({ playVideo, videoId }) {
                   inputProps={{
                     script: videoData?.script || [{ imagePrompt: "test Haroun Barhoumi" }],
                     imageList:
-                      videoData?.imageList ||
-                      Array.from({ length: 50 }, (_, i) => `https://picsum.photos/800/600?random=${i + 1}`),
+                      videoData?.imageList || [],
                     audioFileUrl:
                       videoData?.audioFileUrl ||
                       "https://firebasestorage.googleapis.com/v0/b/replanto.appspot.com/o/ai-short-video-files%2Foutput.mp3?alt=media&token=e43777fa-c740-4243-acf6-99845683e750",
-                    captions: videoData?.captions || [
-                      {
-                        text: "Hello",
-                        start: "0",
-                        end: "150",
-                        confidence: 0.98,
-                        speaker: null,
-                      },
-                    ],
+                    captions: videoData?.captions || [],
                   }}
                 />
               ) : (
