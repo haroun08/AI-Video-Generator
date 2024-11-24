@@ -12,10 +12,12 @@ import { Button } from "@/components/ui/button";
 import { VideoData } from "@/configs/schema";
 import { db } from "@/configs/db";
 import { eq } from "drizzle-orm";
+import { useRouter } from "next/navigation";
 
 function PlayerDialog({ playVideo, videoId }) {
   const [openDialog, setOpenDialog] = useState(false);
   const [videoData, setVideoData] = useState(null);
+  const router = useRouter();
 
   // Sync dialog state with playVideo prop
   useEffect(() => {
@@ -31,9 +33,49 @@ function PlayerDialog({ playVideo, videoId }) {
       .select()
       .from(VideoData)
       .where(eq(VideoData.id, videoId));
-    
+
     if (result.length > 0) {
       setVideoData(result[0]);
+    }
+  };
+
+  // Submit function to create a video entry
+  const submit = async () => {
+    try {
+      if (!videoData) {
+        alert("Video data is not available.");
+        return;
+      }
+
+      const newVideo = {
+        script: videoData.script || [{ imagePrompt: "test Haroun Barhoumi" }],
+        imageList:
+          videoData.imageList ||
+          Array.from({ length: 50 }, (_, i) => `https://picsum.photos/800/600?random=${i + 1}`),
+        audioFileUrl:
+          videoData.audioFileUrl ||
+          "https://firebasestorage.googleapis.com/v0/b/replanto.appspot.com/o/ai-short-video-files%2Foutput.mp3?alt=media&token=e43777fa-c740-4243-acf6-99845683e750",
+        captions: videoData.captions || [
+          {
+            text: "Hello",
+            start: "0",
+            end: "150",
+            confidence: 0.98,
+            speaker: null,
+          },
+        ],
+        createdBy: "user@example.com", // Replace with the actual user email or ID
+      };
+
+      // Insert the new video into the database
+      await db.insert(VideoData).values(newVideo);
+
+      alert("Video created successfully!");
+      setOpenDialog(false);
+      router.replace("/dashboard");
+    } catch (error) {
+      console.error("Error creating video:", error);
+      alert("Failed to create the video. Please try again.");
     }
   };
 
@@ -48,73 +90,40 @@ function PlayerDialog({ playVideo, videoId }) {
             <DialogDescription>
               {videoData ? (
                 <Player
-                component={RemotionVideo} // Pass the actual component here
-                durationInFrames={750} // Dynamically update based on captions
-                compositionWidth={300}
-                compositionHeight={450}
-                fps={30}
-                controls={true}
-                inputProps={{
-                  script: videoData?.script || [{ imagePrompt: "test Haroun Barhoumi" }],
-                  imageList: videoData?.imageList || [
-                    "https://th.bing.com/th/id/OIP.O3NSw57ifjuhQ_mb29gzggHaHa?w=768&h=768&rs=1&pid=ImgDetMain",
-                    "https://picsum.photos/800/600?random=1",
-                    "https://picsum.photos/800/600?random=2",
-                    "https://picsum.photos/800/600?random=3",
-                  ],
-                  audioFileUrl:
-                    videoData?.audioFileUrl ||
-                    "https://firebasestorage.googleapis.com/v0/b/replanto.appspot.com/o/ai-short-video-files%2Foutput.mp3?alt=media&token=e43777fa-c740-4243-acf6-99845683e750",
-                  captions: videoData?.captions || [
-                    {
-                      "text": "Hello",
-                      "start": "0",
-                      "end": "150",
-                      "confidence": 0.98,
-                      "speaker": null
-                    },
-                    {
-                      "text": "Welcome to our video",
-                      "start": "151",
-                      "end": "300",
-                      "confidence": 0.92,
-                      "speaker": null
-                    },
-                    {
-                      "text": "This is a demo",
-                      "start": "301",
-                      "end": "450",
-                      "confidence": 0.87,
-                      "speaker": null
-                    },
-                    {
-                      "text": "Hope you enjoy it",
-                      "start": "451",
-                      "end": "600",
-                      "confidence": 0.9,
-                      "speaker": null
-                    },
-                    {
-                      "text": "Thank you",
-                      "start": "601",
-                      "end": "750",
-                      "confidence": 0.95,
-                      "speaker": null
-                    }
-                  ],
-                }}
-              />
-              
-              
+                  component={RemotionVideo} // Pass the actual component here
+                  durationInFrames={600} // Dynamically update based on captions
+                  compositionWidth={300}
+                  compositionHeight={450}
+                  fps={60}
+                  controls={true}
+                  inputProps={{
+                    script: videoData?.script || [{ imagePrompt: "test Haroun Barhoumi" }],
+                    imageList:
+                      videoData?.imageList ||
+                      Array.from({ length: 50 }, (_, i) => `https://picsum.photos/800/600?random=${i + 1}`),
+                    audioFileUrl:
+                      videoData?.audioFileUrl ||
+                      "https://firebasestorage.googleapis.com/v0/b/replanto.appspot.com/o/ai-short-video-files%2Foutput.mp3?alt=media&token=e43777fa-c740-4243-acf6-99845683e750",
+                    captions: videoData?.captions || [
+                      {
+                        text: "Hello",
+                        start: "0",
+                        end: "150",
+                        confidence: 0.98,
+                        speaker: null,
+                      },
+                    ],
+                  }}
+                />
               ) : (
                 <p>Loading video data...</p>
               )}
               <div className="flex gap-10 mt-4">
-                <Button variant="ghost" onClick={() => setOpenDialog(false)}>
+                <Button variant="ghost" onClick={() => { router.replace("/dashboard"); setOpenDialog(false); }}>
                   Cancel
                 </Button>
-                <Button onClick={() => alert("Export functionality not implemented yet.")}>
-                  Export
+                <Button onClick={submit}>
+                  Submit & Create Video
                 </Button>
               </div>
             </DialogDescription>

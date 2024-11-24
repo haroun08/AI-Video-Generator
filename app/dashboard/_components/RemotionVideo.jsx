@@ -9,21 +9,20 @@ const RemotionVideo = ({
   captions = [],
   setDurationInFrame,
 }) => {
-  const fps = 30; // Standard FPS
-  const frame = useCurrentFrame(); // Frame info comes from the Player
+  const fps = 30;  
+  const frame = useCurrentFrame();  
 
-  const [durationInFrames, setInternalDurationInFrames] = useState(fps * 5); // Default duration
+  const [durationInFrames, setInternalDurationInFrames] = useState(fps * 5);  
 
   useEffect(() => {
-    // Dynamically set video duration based on captions
-    const calculatedDuration =
+     const calculatedDuration =
       Math.floor((captions[captions.length - 1]?.end / 1000) * fps) || fps * 5;
     setInternalDurationInFrames(calculatedDuration);
-    setDurationInFrame?.(calculatedDuration); // Notify parent
+    setDurationInFrame?.(calculatedDuration);  
   }, [captions]);
 
   const getCurrentCaption = () => {
-    const currentTimeMs = (frame / fps) * 1000; // Convert frame to milliseconds
+    const currentTimeMs = (frame / fps) * 100; // Convert frame to milliseconds
     const currentCaption = captions.find(
       (caption) => currentTimeMs >= caption.start && currentTimeMs <= caption.end
     );

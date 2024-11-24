@@ -11,6 +11,7 @@ import { VideoDataContext } from "@/app/_context/VideoDataContext";
 import { useUser } from "@clerk/nextjs";
 import { VideoData } from "@/configs/schema";
 import PlayerDialog from "../_components/PlayerDialog";
+import { useRouter } from "next/navigation";
 
 function CreateNewVideo() {
   const [formData, setFormData] = useState({});
@@ -22,6 +23,8 @@ function CreateNewVideo() {
   const [imageList, setImagesList] = useState();
   const [playVideo, setPlayVideo] = useState(true);
   const [videoId, setVideoId] = useState(1);
+
+
   const { videoData, setVideoData } = useContext(VideoDataContext);
   const { user } = useUser();
   const onHandleInputChange = (fieldName, fieldValue) => {
@@ -97,8 +100,8 @@ function CreateNewVideo() {
           id: id,
         });
         setVideoData((prev) => ({
-          ...prev,
-          audioFile: resp.data.result,
+          ...prev
+          //audioFile: resp.data.result,
         }));
         setAudioFileUrl(response.data);
         response.data.result &&
